@@ -2,29 +2,22 @@ var https = require('https');
 
 function getHTML (options, callback) {
 
+  var results = '';
+
   https.get(options, function(response) {
 
     response.setEncoding('utf8');
 
-    var dataArr = [];
-    var i = 0;
-
     response.on('data', function(data) {
-      if (data) {
-        dataArr[i] = data;
-        printHTML(data);
-        i += 1;
-
-      }
-    });
+      results += data.toString();
+      });
 
     response.on('end', function() {
       console.log('Response stream complete.');
+      callback(results);
     });
-  })
-
-
-}
+  });
+};
 
 function printHTML (html) {
   console.log(html);
@@ -36,4 +29,4 @@ var requestOptions = {
   path: '/http-examples/step4.html'
 };
 
-getHTML(requestOptions, printHTML());
+getHTML(requestOptions, printHTML);
